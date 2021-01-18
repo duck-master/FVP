@@ -14,7 +14,8 @@ import random
 if input('Do you want to read in your reminders from a file? ') in ['yes', 'Yes']:
     reminders_pathname = input('What is the file pathname? ')   #read in reminders from filename
     with open(reminders_pathname, mode = 'r') as f:
-        reminders_rawlist = f.readlines()
+        reminders_rawlist = f.readlines()                       #read from reminders_pathname and normalize
+        reminders_rawlist = [rr.strip('\n') for rr in reminders_rawlist]
     reminder_lists = {}
     currlist = 'default'                                        #unlisted reminders go into "default" reminder list
     for rr in reminders_rawlist:                                #sort reminders into lists; there might be a more Pythonic way but idk
