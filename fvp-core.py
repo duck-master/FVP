@@ -17,8 +17,8 @@ def read_reminders_from_file(reminders_pathname):
     reminder_lists = {}
     currlist = 'default'                                        #unlisted reminders go into "default" reminder list
     for rr in reminders_rawlist:                                #sort reminders into lists; there might be a more Pythonic way but idk
-        if rr[:2] == '==' and rr[-2:] == '==':
-            currlist = rr[2:-2]
+        if rr[:3] == '== ' and rr[-3:] == ' ==':
+            currlist = rr[3:-3]
         elif currlist not in reminder_lists:                    #to prevent KeyErrors
             reminder_lists[currlist] = [rr]
         else:
@@ -38,7 +38,7 @@ def read_reminders_from_console():
 
 #read in reminders
 if input('Do you want to read in your reminders from a file? ') in ['yes', 'Yes']:
-    reminder_lists = read_reminders_from_filename(input('What is the file path? '))
+    reminder_lists = read_reminders_from_file(input('What is the file path? '))
 else:
     reminder_lists = read_reminders_from_console()
 
