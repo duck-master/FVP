@@ -1,18 +1,16 @@
-#code written by duck_master from 2 january 2021
+#code written by duck_master since 2 january 2021
 #licensed under MIT license
-#based on Final Version Perfected, a method invented by willbradshaw on 27 november 2020
+#based on Final Version Perfected, invented by willbradshaw on 27 november 2020
 #as described in https://www.lesswrong.com/posts/xfcKYznQ6B9yuxB28/final-version-perfected-an-underused-execution-algorithm
 #TODO: make into PyPI package or shell script
 
 #libraries
 import random
 
-#reading in the idea list from user input
+#functions for reading/normalizing input
 #TODO: implement already having stars
 
-#read in reminders
-if input('Do you want to read in your reminders from a file? ') in ['yes', 'Yes']:
-    reminders_pathname = input('What is the file pathname? ')   #read in reminders from filename
+def read_reminders_from_file(reminders_pathname):
     with open(reminders_pathname, mode = 'r') as f:
         reminders_rawlist = f.readlines()                       #read from reminders_pathname and normalize
         reminders_rawlist = [rr.strip('\n') for rr in reminders_rawlist]
@@ -25,8 +23,10 @@ if input('Do you want to read in your reminders from a file? ') in ['yes', 'Yes'
             reminder_lists[currlist] = [rr]
         else:
             reminder_lists[currlist].append(rr)
-else:
-    print('Enter your reminders here. (Type in nothing and enter to stop.)')
+    return reminder_lists
+
+def read_reminders_from_console():
+    print('Enter your reminders here. (Type nothing and enter to stop.)')
     reminders = []                                              #type in reminders
     while True:
             newreminder = input('What is a reminder of yours? ')
@@ -34,7 +34,13 @@ else:
                     reminders.append(newreminder)
             else:
                     break
-    reminder_lists = {'default': reminders}
+    return {'default': reminders}
+
+#read in reminders
+if input('Do you want to read in your reminders from a file? ') in ['yes', 'Yes']:
+    reminder_lists = read_reminders_from_filename(input('What is the file path? '))
+else:
+    reminder_lists = read_reminders_from_console()
 
 #select main list
 if len(reminder_lists) == 1:                                    #if there's only one list, select this

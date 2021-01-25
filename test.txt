@@ -1,0 +1,26 @@
+== english ==
+One
+Two
+Three
+Four
+Five
+Six
+Seven
+
+== français ==
+Un
+Deux
+Trois
+Quatre
+Cinq
+Six
+Sept
+
+== roman numerals ==
+I
+II
+III
+IV
+V
+VI
+VII
