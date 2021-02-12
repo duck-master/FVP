@@ -14,19 +14,9 @@ def read_reminders_from_file(reminders_pathname):
     '''Reads in a list of reminders from a file.
     str -> [str]'''
     with open(reminders_pathname, mode = 'r') as f:
-        reminders_rawlist = f.readlines()                       #read from reminders_pathname and normalize
-        reminders_rawlist = [rr.strip('\n') for rr in reminders_rawlist]
-        reminders_rawlist = list(filter((lambda s: s != ''), reminders_rawlist))
-    reminder_lists = {}
-    currlist = 'default'                                        #unlisted reminders go into "default" reminder list
-    for rr in reminders_rawlist:                                #sort reminders into lists; there might be a more Pythonic way but idk
-        if rr[:3] == '== ' and rr[-3:] == ' ==':
-            currlist = rr[3:-3]
-        elif currlist not in reminder_lists:                    #to prevent KeyErrors
-            reminder_lists[currlist] = [rr]
-        else:
-            reminder_lists[currlist].append(rr)
-    return reminder_lists
+        reminders = f.readlines()                       #read from reminders_pathname and normalize
+        reminders = [rr.strip('\n') for rr in reminders]
+        return reminders
 
 def read_reminders_from_console():
     '''Reads in a list of reminders from text input.
@@ -40,33 +30,23 @@ def read_reminders_from_console():
                     reminders.append(newreminder)
             else:
                     break
-    return {'default': reminders}
+    return reminders
 
 #function to add stars to reminder file lines
 #TODO: implement
-def add_stars_to_reminderlines(reminderlines, items_to_star):
-    '''TODO: implement.
-    This function should add stars to the marked items given by the indices in the second column.
-    [str], [(str, int)] -> [str]
-    '''
-    pass
+#def add_stars_to_reminderlines(reminderlines, items_to_star):
+#    '''TODO: implement.
+#    This function should add stars to the marked items given by the indices in the second column.
+#    [str], [(str, int)] -> [str]
+#    '''
+#    pass
 
 #read in reminders
 if input('Do you want to read in your reminders from a file? ') in ['yes', 'Yes']:
     reminders_pathname = input('What is the file path? ')
-if reminders_pathname != '':
-    reminder_lists = read_reminders_from_file(reminders_pathname)
+    reminders = read_reminders_from_file(reminders_pathname)
 else:
-    reminder_lists = read_reminders_from_console()
-
-#select main list
-if len(reminder_lists) == 1:                                    #if there's only one list, select this
-    reminders = reminder_lists[list(reminder_lists)[0]]
-else:
-    list_to_select = input('What reminder list would you like to FVP? ')
-    if list_to_select not in reminder_lists:
-        list_to_select = list(reminder_lists)[0]
-    reminders = reminder_lists[list_to_select]
+    reminders = read_reminders_from_console()
 
 #running FVP on idea list
 print('\nNow, let\'s FVP your reminders!')
