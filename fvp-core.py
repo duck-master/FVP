@@ -33,13 +33,14 @@ def read_reminders_from_console():
     return reminders
 
 #function to add stars to reminder file lines
-#TODO: implement
-#def add_stars_to_reminderlines(reminderlines, items_to_star):
-#    '''TODO: implement.
-#    This function should add stars to the marked items given by the indices in the second column.
-#    [str], [(str, int)] -> [str]
-#    '''
-#    pass
+def add_stars_to_reminderlines(reminderlines, items_to_star):
+    '''This function should add stars to the marked items given by the indices in the second column.
+    [str], [(str, int)] -> [str]
+    '''
+    result = reminderlines
+    for (item, index) in items_to_star:
+        result[index] = '*' + result[index]
+    return result
 
 #read in reminders
 if input('Do you want to read in your reminders from a file? ') in ['yes', 'Yes']:
@@ -65,12 +66,12 @@ for idea in list(bestideas.__reversed__()):
     print(f'- {idea[0]}')
 
 #for file writes
-##if reminders_pathname != '':
-##    if input('Write to file? ') in ['yes', 'Yes']:
-##        with open(reminders_pathname, 'r') as f:
-##            reminderfile_contents = f.readlines()
-##        with open(reminders_pathname, 'w') as f:
-##            f.writelines(add_stars_to_reminderlines(reminderfile_contents, bestideas))
+if reminders_pathname != '':
+    if input('Write to file? ') in ['yes', 'Yes']:
+        with open(reminders_pathname, 'r') as f:
+            reminderfile_contents = f.readlines()
+        with open(reminders_pathname, 'w') as f:
+            f.writelines(add_stars_to_reminderlines(reminderfile_contents, bestideas))
 
 if input('\nQuit? ') in ['yes', 'Yes']:
     exit()
