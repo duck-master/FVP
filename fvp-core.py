@@ -12,11 +12,13 @@ import random       #for randomizing reminder list
 #TODO: implement try-catch in case of bad filepath
 def read_reminders_from_file(reminders_pathname):
     '''Reads in a list of reminders from a file.
+    Notes: * indicates important reminders; filtered by no. of stars.
+    ! indicates completed reminders; these are ignored.
     str -> [str]'''
     with open(reminders_pathname, mode = 'r') as f:
-        reminders = f.readlines()                       #read from reminders_pathname and normalize
-        reminders = [rr.strip('\n') for rr in reminders]
-        return reminders
+        rlines = f.readlines()                       #read from reminders_pathname and normalize
+        rlines = [rr.strip('\n') for rr in reminders]
+        return reminder
 
 def read_reminders_from_console():
     '''Reads in a list of reminders from text input.
@@ -25,7 +27,7 @@ def read_reminders_from_console():
     print('Enter your reminders here. (Type nothing and enter to stop.)')
     reminders = []                                              #type in reminders
     while True:
-            newreminder = input('What is a reminder of yours? ')
+            newreminder = input('What is one of your reminders? ')
             if newreminder != '':
                     reminders.append(newreminder)
             else:
@@ -42,15 +44,31 @@ def add_stars_to_reminderlines(reminderlines, items_to_star):
         result[index] = '*' + result[index]
     return result
 
+#function to normalize reminders
+def normalize_reminderlines(reminderlines):
+    '''Normalizes reminderlines.
+    Deletes lines starting with -.
+    Filters lines not starting with *, if any exists, and eliminates beginning *.
+    [str] -> [str].'''
+    result = reminderlines
+    result = list(filter((lambda s: s[0] != '-'), result)) #detes lines starting with -
+    imp = list(filter((lambda s: s[0] = '*'), result)) #selects lines starting with *
+    if len(imp) > 0:
+        result = list(map((lambda s: s[1:]), imp))
+    return result
+
+#main code
 #read in reminders
 if input('Do you want to read in your reminders from a file? ') in ['yes', 'Yes']:
     reminders_pathname = input('What is the file path? ')
     reminders = read_reminders_from_file(reminders_pathname)
 else:
     reminders = read_reminders_from_console()
+#normalize reminders
+reminders = normalize_reminderlines(reminders)
 
 #running FVP on idea list
-print('\nNow, let\'s FVP your reminders!')
+print('\nNow, let\'s sort your reminders!')
 #keep track of indices (to make file-writing easy)
 reminders_shuffled = [(reminders[index], index) for index in range(len(reminders))]
 random.shuffle(reminders_shuffled)      #to remove bias from idea order; TODO: allow option to keep original order
@@ -61,9 +79,7 @@ for i in range(1, len(reminders_shuffled)):
 		bestideas.append(reminders_shuffled[i])
 
 #output
-print('\nHere are your marked reminders, in order of importance:')
-for idea in list(bestideas.__reversed__()):
-    print(f'- {idea[0]}')
+print(f'\nYou should do {list(bestideas.__reversed__())[0][0]}.')
 
 #for file writes
 if reminders_pathname != '':
